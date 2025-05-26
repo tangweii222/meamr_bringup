@@ -12,10 +12,12 @@ def generate_launch_description():
     pkg_serial = get_package_share_directory('serial_driver')
     pkg_drive_model = get_package_share_directory('meamr_drive_model')
     pkg_description = get_package_share_directory('meamr_description')
+    pkg_teleop = get_package_share_directory('meamr_teleop')
 
     # Launch file paths
     launch_serial_path = os.path.join(pkg_serial, 'launch', 'serial_driver_bridge_node.launch.py')
     launch_drive_model_path = os.path.join(pkg_drive_model, 'launch', 'meamr_base.launch.py')
+    launch_teleop_path = os.path.join(pkg_teleop, 'launch', 'meamr_teleop.launch.py')
 
     # Other paths (urdf, config, etc.)
     serial_config_path = os.path.join(pkg_drive_model, 'config', 'serial.yaml')
@@ -27,16 +29,7 @@ def generate_launch_description():
         executable='robot_state_publisher',
         parameters=[{'robot_description': Command(['xacro ', urdf_path])}],
     )
-
-    joy_node = Node(
-        package='joy',
-        executable='joy_node',
-        name='joy_node',
-        output='screen',
-        parameters=[{'deadzone': 0.15, 'autorepeat_rate': 20.0}]
-    )
     
-
     # Declare arguments
     declare_urdf = DeclareLaunchArgument(
         name='model', 
@@ -55,11 +48,19 @@ def generate_launch_description():
         PythonLaunchDescriptionSource(launch_drive_model_path)
     )
 
+    meamr_teleop_launch = IncludeLaunchDescription(
+        PythonLaunchDescriptionSource(launch_teleop_path)
+    )
+
     ld = LaunchDescription()
+    # Arguments
     ld.add_action(declare_urdf)
+    # Nodes and included launch files
     ld.add_action(serial_driver_launch)
     ld.add_action(meamr_drive_model_launch)
+    ld.add_action(meamr_teleop_launch)
+    
     ld.add_action(robot_state_publisher_node)
-    ld.add_action(joy_node)
+
 
     return ld
