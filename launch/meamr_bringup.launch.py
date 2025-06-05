@@ -28,6 +28,8 @@ def generate_launch_description():
         package='robot_state_publisher',
         executable='robot_state_publisher',
         parameters=[{'robot_description': Command(['xacro ', urdf_path])}],
+        output='log',
+        arguments=['--ros-args', '--log-level', 'error']
     )
     
     # Declare arguments
