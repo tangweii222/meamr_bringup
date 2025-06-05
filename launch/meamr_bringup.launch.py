@@ -12,12 +12,12 @@ def generate_launch_description():
     pkg_serial = get_package_share_directory('serial_driver')
     pkg_drive_model = get_package_share_directory('meamr_drive_model')
     pkg_description = get_package_share_directory('meamr_description')
-    pkg_teleop = get_package_share_directory('meamr_teleop')
+    pkg_joystick = get_package_share_directory('meamr_joystick')
 
     # Launch file paths
     launch_serial_path = os.path.join(pkg_serial, 'launch', 'serial_driver_bridge_node.launch.py')
     launch_drive_model_path = os.path.join(pkg_drive_model, 'launch', 'meamr_base.launch.py')
-    launch_teleop_path = os.path.join(pkg_teleop, 'launch', 'meamr_teleop.launch.py')
+    launch_joystick_path = os.path.join(pkg_joystick, 'launch', 'meamr_joystick.launch.py')
 
     # Other paths (urdf, config, etc.)
     serial_config_path = os.path.join(pkg_drive_model, 'config', 'serial.yaml')
@@ -48,8 +48,8 @@ def generate_launch_description():
         PythonLaunchDescriptionSource(launch_drive_model_path)
     )
 
-    meamr_teleop_launch = IncludeLaunchDescription(
-        PythonLaunchDescriptionSource(launch_teleop_path)
+    meamr_joystick_launch = IncludeLaunchDescription(
+        PythonLaunchDescriptionSource(launch_joystick_path)
     )
 
     ld = LaunchDescription()
@@ -58,7 +58,7 @@ def generate_launch_description():
     # Nodes and included launch files
     ld.add_action(serial_driver_launch)
     ld.add_action(meamr_drive_model_launch)
-    ld.add_action(meamr_teleop_launch)
+    ld.add_action(meamr_joystick_launch)
     
     ld.add_action(robot_state_publisher_node)
 
