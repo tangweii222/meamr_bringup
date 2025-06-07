@@ -60,7 +60,7 @@ def generate_launch_description():
     # Nodes and included launch files
     ld.add_action(serial_driver_launch)
     ld.add_action(meamr_drive_model_launch)
-    ld.add_action(meamr_joystick_launch)
+    # ld.add_action(meamr_joystick_launch)
     
     ld.add_action(robot_state_publisher_node)
 
